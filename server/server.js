@@ -6,8 +6,8 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-// Frontend URL'sini belirlemek için ortam değişkeni kullanılır, yoksa localhost varsayılır
-const frontendURL = process.env.FRONTEND_URL || 'https://mesaj-app.onrender.com'; // Aynı domainde çalıştığımız için '/' kullandık
+// Render ortamında FRONTEND_URL olarak tam URL atanmalı, yoksa localhost kullanılır
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 app.use(cors({
   origin: frontendURL,
@@ -74,7 +74,7 @@ app.post('/checkUser', (req, res) => {
   });
 });
 
-// Statik dosyaları sunmak için client klasörünü kullan
+// Statik dosyaları sunmak için client/build klasörünü kullan
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // React uygulamasındaki diğer yolları desteklemek için
