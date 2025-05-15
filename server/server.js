@@ -15,7 +15,6 @@ app.use(cors({
 
 app.use(express.json());
 
-// Veritabanı bağlantısı
 const dbPath = path.resolve(process.cwd(), 'users.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -29,7 +28,6 @@ db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)');
 });
 
-// API'ler
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
@@ -57,14 +55,6 @@ app.post('/checkUser', (req, res) => {
     if (err) return res.status(500).json({ message: 'Veritabanı hatası.' });
     res.json({ exists: !!row });
   });
-});
-
-// React frontend build dizini
-const buildPath = path.resolve(__dirname, '../client/build');
-app.use(express.static(buildPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 app.listen(port, () => {
