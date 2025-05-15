@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Frontend URL'sini belirlemek için ortam değişkeni kullanılır, yoksa localhost varsayılır
-const frontendURL = process.env.FRONTEND_URL || '/'; // Aynı domainde çalıştığımız için '/' kullandık
+const frontendURL = process.env.FRONTEND_URL || 'https://mesaj-app.onrender.com'; // Aynı domainde çalıştığımız için '/' kullandık
 
 app.use(cors({
   origin: frontendURL,
