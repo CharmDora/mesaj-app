@@ -36,7 +36,7 @@ const Chat = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://mesaj-app.onrender.com/checkUser', { // Render URL'sini kullandık
+      const response = await axios.post('https://mesaj-app-backend.onrender.com/checkUser', { // Render URL'sini kullandık
         username: enteredUsername,
       });
 

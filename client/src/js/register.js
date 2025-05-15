@@ -12,21 +12,18 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      // Render ortamında backend URL'sini dinamik olarak belirle
-      const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
-      const response = await axios.post(`${API_URL}/register`, {
+      const response = await axios.post('https://mesaj-app-backend.onrender.com/register', {
         username,
         password,
       });
 
-      // Kayıt işlemi başarılı olduğunda
       setSuccessMessage(response.data.message);
-      setUsername(''); // Formu temizle
-      setPassword(''); // Formu temizle
-      setErrorMessage(''); // Hata mesajını sıfırla
+      setUsername('');
+      setPassword('');
+      setErrorMessage('');
     } catch (error) {
-      // Hata durumu
       setErrorMessage(error.response?.data?.message || 'Bir hata oluştu.');
+      setSuccessMessage('');
     }
   };
 

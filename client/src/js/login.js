@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
     try {
       // Axios ile POST isteği gönderiyoruz
-      const response = await axios.post('https://mesaj-app.onrender.com/login', { // Render URL'si
+      const response = await axios.post('https://mesaj-app-backend.onrender.com/login', { // Render URL'si
         username,
         password,
       });
