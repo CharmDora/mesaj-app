@@ -6,8 +6,8 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-// FRONTEND_URL ortam değişkeni yoksa localhost:3000 kabul et
-const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+// Frontend URL'sini belirlemek için ortam değişkeni kullanılır, yoksa localhost varsayılır
+const frontendURL = process.env.FRONTEND_URL || '/'; // Aynı domainde çalıştığımız için '/' kullandık
 
 app.use(cors({
   origin: frontendURL,
@@ -72,6 +72,14 @@ app.post('/checkUser', (req, res) => {
 
     res.json({ exists: !!row });
   });
+});
+
+// Statik dosyaları sunmak için client klasörünü kullan
+app.use(express.static(path.resolve(__dirname, '../client/build')));
+
+// React uygulamasındaki diğer yolları desteklemek için
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 app.listen(port, () => {

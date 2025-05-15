@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../css/register.css';
-import './test.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -14,7 +13,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://mesaj-app-backend.onrender.com/register', {
+      const response = await axios.post('/register', { // URL backend ile aynı domain'de çalışacak şekilde ayarlandı
         username,
         password,
       });
@@ -60,7 +59,6 @@ const Register = () => {
         Zaten hesabınız var mı? <Link to="/login">Giriş yapın</Link>
       </p>
     </div>
-    
   );
 };
 
