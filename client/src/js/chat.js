@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const BACKEND_URL = 'https://mesaj-app-backend.onrender.com';
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -36,7 +38,7 @@ const Chat = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/checkUser', { // URL backend ile aynı domain'de çalışacak şekilde düzenlendi
+      const response = await axios.post(`${BACKEND_URL}/checkUser`, {
         username: enteredUsername,
       });
 

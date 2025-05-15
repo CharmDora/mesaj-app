@@ -6,8 +6,8 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-// FRONTEND_URL olarak sadece gerçek prod URL'nizi sabitledik
-const frontendURL = 'https://mesaj-app.onrender.com';
+// Frontend URL - sadece burayı frontend URL'n ile değiştir
+const frontendURL = 'https://mesaj-app-frontend.onrender.com';
 
 app.use(cors({
   origin: frontendURL,
@@ -17,7 +17,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Veritabanı yolu
+// Veritabanı yolu - users.db dosyan buradaysa problem olmaz
 const dbPath = path.resolve(process.cwd(), 'users.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -32,7 +32,7 @@ db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)');
 });
 
-// Kayıt API'si
+// Kayıt API
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
 
@@ -49,7 +49,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-// Giriş API'si
+// Giriş API
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -62,7 +62,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Kullanıcı kontrol API'si
+// Kullanıcı kontrol API
 app.post('/checkUser', (req, res) => {
   const { username } = req.body;
 
@@ -71,14 +71,6 @@ app.post('/checkUser', (req, res) => {
 
     res.json({ exists: !!row });
   });
-});
-
-// Statik dosyaları sun
-app.use(express.static(path.resolve(__dirname, '../client/build')));
-
-// React için diğer yolları destekle
-app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 app.listen(port, () => {

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../css/register.css';
 
+const BACKEND_URL = 'https://mesaj-app-backend.onrender.com';
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +15,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/register', { // URL backend ile aynı domain'de çalışacak şekilde ayarlandı
+      const response = await axios.post(`${BACKEND_URL}/register`, {
         username,
         password,
       });

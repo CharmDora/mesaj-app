@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const BACKEND_URL = 'https://mesaj-app-backend.onrender.com';
+
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,15 +13,14 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Axios ile POST isteği gönderiyoruz
-      const response = await axios.post('/login', { // URL backend ile aynı domain'de çalışacak şekilde düzenlendi
+      const response = await axios.post(`${BACKEND_URL}/login`, {
         username,
         password,
       });
 
       if (response.data.message === 'Giriş başarılı!') {
-        localStorage.setItem('isAuthenticated', 'true'); // Giriş başarılıysa kullanıcıyı authenticated olarak işaretliyoruz
-        navigate('/chat'); // Chat ekranına yönlendiriyoruz
+        localStorage.setItem('isAuthenticated', 'true');
+        navigate('/chat');
       } else {
         setError('Hesap bulunamadı');
       }
