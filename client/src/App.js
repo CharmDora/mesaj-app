@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './js/login';
-import Register from './js/register';
-import Chat from './js/chat';
-import PrivateRoute from './js/PrivateRoute'; // PrivateRoute import ediyoruz
+import Login from './js/login.js';
+import Register from './js/register.js';
+import Chat from './js/chat.js';
+import PrivateRoute from './js/PrivateRoute.js'; // PrivateRoute import ediyoruz
 
 import './css/login.css';
 import './css/register.css';
