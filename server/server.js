@@ -6,7 +6,7 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-// Render ortamında FRONTEND_URL olarak tam URL atanmalı, yoksa localhost kullanılır
+// FRONTEND_URL tanımı
 const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 app.use(cors({
@@ -17,9 +17,8 @@ app.use(cors({
 
 app.use(express.json());
 
-// Veritabanı dosyasının yolu (server.js dosyasına göre bir üst dizinde users.db)
-const dbPath = path.resolve(__dirname, '../users.db');
-
+// Veritabanı dosyasının yolu
+const dbPath = path.resolve(process.cwd(), 'users.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Veritabanı bağlantısı hatası:', err.message);
@@ -74,11 +73,11 @@ app.post('/checkUser', (req, res) => {
   });
 });
 
-// Statik dosyaları sunmak için client/build klasörünü kullan
+// Statik dosyaları sun
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-// React uygulamasındaki diğer yolları desteklemek için
-app.get('*', (req, res) => {
+// React için diğer yolları destekle
+app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
