@@ -8,9 +8,9 @@ const port = process.env.PORT || 5000;
 const frontendURL = 'https://mesaj-app-frontend.onrender.com';
 
 app.use(cors({
-  origin: frontendURL,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  origin: 'https://mesaj-app-frontend.onrender.com', // Ön uç URL
+  methods: '*', // Tüm HTTP metodlarına izin ver
+  allowedHeaders: '*', // Tüm başlıklara izin ver
 }));
 
 app.use(express.json());
