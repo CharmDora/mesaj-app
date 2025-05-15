@@ -6,8 +6,8 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-// FRONTEND_URL tanımı
-const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+// FRONTEND_URL olarak sadece gerçek prod URL'nizi sabitledik
+const frontendURL = 'https://mesaj-app.onrender.com';
 
 app.use(cors({
   origin: frontendURL,
@@ -17,7 +17,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Veritabanı dosyasının yolu
+// Veritabanı yolu
 const dbPath = path.resolve(process.cwd(), 'users.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -77,10 +77,10 @@ app.post('/checkUser', (req, res) => {
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // React için diğer yolları destekle
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 app.listen(port, () => {
-  console.log(`Server çalışıyor: http://localhost:${port}`);
+  console.log(`Server çalışıyor: http://localhost:${port} - Allowed frontend origin: ${frontendURL}`);
 });
