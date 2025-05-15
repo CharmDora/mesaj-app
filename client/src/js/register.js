@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../css/register.css';
+import './test.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -59,6 +60,7 @@ const Register = () => {
         Zaten hesabınız var mı? <Link to="/login">Giriş yapın</Link>
       </p>
     </div>
+    
   );
 };
 
