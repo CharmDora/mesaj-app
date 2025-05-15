@@ -5,8 +5,6 @@ const path = require('path');
 const app = express();
 
 const port = process.env.PORT || 5000;
-
-// Frontend URL - sadece burayı frontend URL'n ile değiştir
 const frontendURL = 'https://mesaj-app-frontend.onrender.com';
 
 app.use(cors({
@@ -17,7 +15,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Veritabanı yolu - users.db dosyan buradaysa problem olmaz
+// Veritabanı bağlantısı
 const dbPath = path.resolve(process.cwd(), 'users.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -27,50 +25,46 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// users tablosu yoksa oluştur
 db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)');
 });
 
-// Kayıt API
+// API'ler
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
-
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
     if (err) return res.status(500).json({ message: 'Veritabanı hatası.' });
-
     if (row) return res.status(400).json({ message: 'Bu kullanıcı adı zaten var.' });
-
     db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
       if (err) return res.status(500).json({ message: 'Kullanıcı eklenemedi.' });
-
       res.status(201).json({ message: 'Kayıt başarılı!' });
     });
   });
 });
 
-// Giriş API
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-
   db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
     if (err) return res.status(500).json({ message: 'Veritabanı hatası.' });
-
     if (!row) return res.status(400).json({ message: 'Hesap bulunamadı.' });
-
     res.json({ message: 'Giriş başarılı!', username: row.username });
   });
 });
 
-// Kullanıcı kontrol API
 app.post('/checkUser', (req, res) => {
   const { username } = req.body;
-
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
     if (err) return res.status(500).json({ message: 'Veritabanı hatası.' });
-
     res.json({ exists: !!row });
   });
+});
+
+// React frontend build dizini
+const buildPath = path.resolve(__dirname, '../client/build');
+app.use(express.static(buildPath));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 app.listen(port, () => {
