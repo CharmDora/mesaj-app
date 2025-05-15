@@ -1,13 +1,63 @@
-document.getElementById('login-form').addEventListener('submit', function (event) {
-  event.preventDefault();
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  if (username && password) {
-    alert(`Welcome, ${username}!`);
-    // Burada sunucuya giriş isteği gönderebilirsiniz.
-  } else {
-    alert('Please fill in all fields.');
-  }
-});
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      // Axios ile POST isteği gönderiyoruz
+      const response = await axios.post('https://mesaj-app.onrender.com/login', { // Render URL'si
+        username,
+        password,
+      });
+
+      if (response.data.message === 'Giriş başarılı!') {
+        localStorage.setItem('isAuthenticated', 'true'); // Giriş başarılıysa kullanıcıyı authenticated olarak işaretliyoruz
+        navigate('/chat'); // Chat ekranına yönlendiriyoruz
+      } else {
+        setError('Hesap bulunamadı');
+      }
+    } catch (error) {
+      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Giriş Yap</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          <label>Kullanıcı Adı</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Şifre</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Giriş Yap</button>
+        {error && <div className="error">{error}</div>}
+      </form>
+      <p>
+        Hesabınız yok mu? <a href="/register">Kayıt Ol</a>
+      </p>
+    </div>
+  );
+}
+
+export default Login;
